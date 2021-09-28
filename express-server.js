@@ -1,3 +1,4 @@
+const { response } = require("express");
 const express = require("express");
 const morgan = require("morgan");
 const app = express();
@@ -39,13 +40,21 @@ app.get("/u/:shortURL", (req, res) => {
 }); 
 
 app.post("/urls", (req, res) => {
-  shortURL = req.body.shortURL;
-  longURL = req.body.longURL;
+  const shortURL = req.body.shortURL;
+  const longURL = req.body.longURL;
 
   shortURL = generateRandomString();
   urlDatabase[shortURL] = longURL;
 
   res.redirect(`/urls/${shortURL}`);
+});
+
+app.post("/urls/:shortURL/delete", (req, res) => {
+  const shortURL = req.params.shortURL;
+  delete urlDatabase[shortURL];
+  console.log(urlDatabase);
+
+  res.redirect('/urls');
 });
 
 /*
