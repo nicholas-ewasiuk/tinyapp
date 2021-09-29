@@ -22,6 +22,13 @@
               <td><a href='/u/<%= url %>'><%= url %></a></td>
               <td><%= urls[url] %></td>
               <td>
+                <form method="GET" action="/urls/<%= url %>/">
+                  <div>
+                    <button type="edit" class="btn btn-secondary">Edit</button>
+                  </div>
+                </form>
+              </td>
+              <td>
                 <form method="POST" action="/urls/<%= url %>/delete">
                   <div>
                     <button type="delete" class="btn btn-secondary">Delete</button>
