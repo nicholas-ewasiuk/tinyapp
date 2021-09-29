@@ -7,6 +7,22 @@
     <div class="navbar-nav">
       <a class="nav-item nav-link" href="/urls">My URLs</a>
       <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
+      <% if (username) { %>
+        <p class="nav-item nav-link">Username: <%= username %></p>
+        <form method="POST" action="/logout/">
+          <div>
+            <button type="logout" class="btn btn-secondary">Logout</button>
+          </div>
+        </form>
+      <% } else { %>
+        <form class="form-inline" action="/login" method="POST">
+          <div class="form-group mb-2">
+            <label for="username">Enter a username:</label>
+            <input class="form-control" type="text" name="username" placeholder="http://">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      <% } %>
     </div>
   </div>
 </nav>
