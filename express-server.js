@@ -60,6 +60,15 @@ app.get("/urls/login", (req, res) => {
   res.render("pages/urls_login", templateVars);
 });
 
+app.get("/urls/register", (req, res) => {
+  let userId = req.cookies["userId"];
+  let user = users[userId];
+  const templateVars = { 
+    user: user
+  };
+  res.render("pages/urls_register", templateVars);
+});
+
 
 app.get("/urls/:shortURL", (req, res) => {
   const templateVars = { 
@@ -123,23 +132,16 @@ app.post("/login", (req, res) => {
 
   let user = findUserByEmail(email);
 
-  if (!email || !password) {
-    return res.status(400).send("Email or password cannot be blank.");
+  if (!user) {
+    return res.status(400).send("Credentials invalid");
   }
 
-  if (user) {
-      return res.status(400).send("Email already in use.");
+  if (users[user]['password'] !== password) {
+    return res.status(400).send("Credentials invalid");
   }
 
-  userId = generateRandomString();
+  res.cookie('userId', user);
 
-  users[userId] = { 
-    'id': userId,
-    'email': email,
-    'password': password
-  };
-
-  res.cookie('userId', userId);
   res.redirect('/urls');
 });
 
