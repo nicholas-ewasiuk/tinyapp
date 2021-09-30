@@ -71,6 +71,31 @@ exports.display_urls_show = (req, res) => {
   res.render("pages/urls_show", templateVars);
 };
 
+exports.url_delete = (req, res) => {
+  let shortURL = req.params.shortURL;
+  delete urlDatabase[shortURL];
+
+  res.redirect('/');
+};
+
+exports.url_new = (req, res) => {
+  let longURL = req.body.longURL;
+
+  shortURL = generateRandomString();
+  urlDatabase[shortURL] = longURL;
+
+  res.redirect(`/urls/${shortURL}`);
+};
+
+exports.url_edit = (req, res) => {
+  let longURL = req.body.longURL;
+  let shortURL = req.params.id;
+
+  urlDatabase[shortURL] = longURL;
+
+  res.redirect('/');
+};
+
 exports.user_logout = (req, res) => {
   res.clearCookie('userId');
   res.redirect('/');

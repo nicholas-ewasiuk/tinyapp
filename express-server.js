@@ -1,36 +1,8 @@
-const { response } = require("express");
-const express = require("express");
-const cookieParser = require('cookie-parser');
-const morgan = require("morgan");
 const app = require("./app");
-
-function generateRandomString() {
-  return (Math.random() * 1e+18).toString(36).slice(0, 6);
-};
-
-function findUserByEmail(email) {
-  for (let key in users) {
-    if (users[key]['email'] === email) {
-      return key;
-    }
-  }
-};
 
 const PORT = 8080;
 
-const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
-};
-
-const users = {
-  'userOne': {
-    id: 'userOne',
-    email: 'a@a.com',
-    password: '123'
-  }
-};
-
+/*
 app.post("/urls", (req, res) => {
   let longURL = req.body.longURL;
 
@@ -40,7 +12,7 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/${shortURL}`);
 });
 
-/*
+
 app.post("/register", (req, res) => {
 
   let email = req.body.email;
@@ -106,7 +78,7 @@ app.post("/logout/", (req, res) => {
   res.clearCookie('userId');
   res.redirect('/urls');
 });
-*/
+
 
 // delete_route
 app.post("/urls/:shortURL/delete", (req, res) => {
@@ -124,9 +96,9 @@ app.post("/urls/:id", (req, res) => {
 
   res.redirect('/urls');
 });
+*/
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
-
-
