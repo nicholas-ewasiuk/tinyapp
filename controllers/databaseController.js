@@ -76,6 +76,13 @@ exports.display_urls_show = (req, res) => {
   res.render("pages/urls_show", templateVars);
 };
 
+//Navigate to long URL
+exports.display_urls_long = (req, res) => {
+  const longURL = urlDatabase[req.params.shortURL];
+  res.redirect(longURL);
+}; 
+
+
 //Delete URL from database
 exports.url_delete = (req, res) => {
   let shortURL = req.params.shortURL;
