@@ -2,6 +2,7 @@ const { response } = require("express");
 const express = require("express");
 const cookieParser = require('cookie-parser');
 const morgan = require("morgan");
+const app = require("./app");
 
 function generateRandomString() {
   return (Math.random() * 1e+18).toString(36).slice(0, 6);
@@ -29,13 +30,6 @@ const users = {
     password: '123'
   }
 };
-
-const app = express();
-
-app.use(express.urlencoded({extended: true}));
-app.use(cookieParser());
-app.use(morgan('dev'));
-app.set('view engine', 'ejs');
 
 app.get("/urls", (req, res) => {
   let userId = req.cookies["userId"];
