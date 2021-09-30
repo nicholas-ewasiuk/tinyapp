@@ -14,4 +14,8 @@ router.get('/', function(req, res, next) {
   res.render("pages/urls_index", templateVars);
 });
 
+router.get('/cool', function(req, res, next) {
+  res.send('you are cool');
+});
+
 module.exports = router;
