@@ -31,76 +31,6 @@ const users = {
   }
 };
 
-app.get("/urls", (req, res) => {
-  let userId = req.cookies["userId"];
-  let user = users[userId];
-  const templateVars = { 
-    urls: urlDatabase,
-    user: user,
-    error: ""
-  };
-  res.render("pages/urls_index", templateVars);
-});
-
-//Create_new_URL
-app.get("/urls/new", (req, res) => {
-  let userId = req.cookies["userId"];
-
-  if (!userId) {
-    const templateVars = {};
-    templateVars.error = "";
-    templateVars.user = null;
-    templateVars.urls = urlDatabase;
-
-    templateVars.error = "Log in to create new URLs";
-    return res.render("pages/urls_index", templateVars);
-  }
-  let user = users[userId];
-  const templateVars = { 
-    user: user
-  };
-  res.render("pages/urls_new", templateVars);
-});
-
-app.get("/urls/login", (req, res) => {
-  let userId = req.cookies["userId"];
-  let user = users[userId];
-  const templateVars = { 
-    user: user,
-    error: "",
-  };
-  res.render("pages/urls_login", templateVars);
-});
-
-app.get("/urls/register", (req, res) => {
-  let userId = req.cookies["userId"];
-  let user = users[userId];
-  const templateVars = { 
-    user: user,
-    error: "",
-  };
-  res.render("pages/urls_register", templateVars);
-});
-
-app.get("/urls/:shortURL", (req, res) => {
-  const templateVars = { 
-    shortURL: req.params.shortURL, 
-    longURL: urlDatabase[req.params.shortURL],
-    username: req.cookies["username"] 
-  };
-  res.render("pages/urls_show", templateVars);
-});
-
-app.get("/u/:shortURL", (req, res) => {
-  let userId = req.cookies["userId"];
-  let user = users[userId];
-  const templateVars = { 
-    user: user
-  };
-  const longURL = urlDatabase[req.params.shortURL];
-  res.redirect(longURL, templateVars);
-}); 
-
 app.post("/urls", (req, res) => {
   let longURL = req.body.longURL;
 
@@ -110,6 +40,7 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/${shortURL}`);
 });
 
+/*
 app.post("/register", (req, res) => {
 
   let email = req.body.email;
@@ -142,7 +73,8 @@ app.post("/register", (req, res) => {
   res.cookie('userId', userId);
   res.redirect('/urls');
 });
-
+*/
+/*
 app.post("/login", (req, res) => {
 
   let email = req.body.email;
@@ -168,11 +100,13 @@ app.post("/login", (req, res) => {
 
   res.redirect('/urls');
 });
-
+*/
+/*
 app.post("/logout/", (req, res) => {
   res.clearCookie('userId');
   res.redirect('/urls');
 });
+*/
 
 // delete_route
 app.post("/urls/:shortURL/delete", (req, res) => {
