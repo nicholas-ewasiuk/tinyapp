@@ -1,5 +1,4 @@
-const User = require('../models/database');
-const { users, urlDatabase } = require('../models/database');
+const users = require('../models/users');
 
 exports.index = (req, res) => {
   let userId = req.cookies["userId"];
