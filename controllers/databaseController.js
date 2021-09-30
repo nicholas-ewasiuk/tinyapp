@@ -12,6 +12,7 @@ function findUserByEmail(email) {
   }
 };
 
+//Display home page
 exports.index = (req, res) => {
   let userId = req.cookies["userId"];
   let user = users[userId];
@@ -23,6 +24,7 @@ exports.index = (req, res) => {
   res.render("pages/urls_index", templateVars);
 };
 
+//Display login page
 exports.display_user_login = (req, res) => {
   let userId = req.cookies["userId"];
   let user = users[userId];
@@ -33,6 +35,7 @@ exports.display_user_login = (req, res) => {
   res.render("pages/urls_login", templateVars);
 };
 
+//Display registration page
 exports.display_user_register = (req, res) => {
   let userId = req.cookies["userId"];
   let user = users[userId];
@@ -43,6 +46,7 @@ exports.display_user_register = (req, res) => {
   res.render("pages/urls_register", templateVars);
 };
 
+//Display URL creation page
 exports.display_urls_new = (req, res) => {
   let userId = req.cookies["userId"];
 
@@ -62,6 +66,7 @@ exports.display_urls_new = (req, res) => {
   res.render("pages/urls_new", templateVars);
 };
 
+//Display individual URL page with editing
 exports.display_urls_show = (req, res) => {
   const templateVars = { 
     shortURL: req.params.shortURL, 
@@ -71,6 +76,7 @@ exports.display_urls_show = (req, res) => {
   res.render("pages/urls_show", templateVars);
 };
 
+//Delete URL from database
 exports.url_delete = (req, res) => {
   let shortURL = req.params.shortURL;
   delete urlDatabase[shortURL];
@@ -78,6 +84,7 @@ exports.url_delete = (req, res) => {
   res.redirect('/');
 };
 
+//Create new shortened URL
 exports.url_new = (req, res) => {
   let longURL = req.body.longURL;
 
@@ -87,6 +94,7 @@ exports.url_new = (req, res) => {
   res.redirect(`/urls/${shortURL}`);
 };
 
+//Edit long URL
 exports.url_edit = (req, res) => {
   let longURL = req.body.longURL;
   let shortURL = req.params.id;
@@ -96,11 +104,13 @@ exports.url_edit = (req, res) => {
   res.redirect('/');
 };
 
+//Logout current user
 exports.user_logout = (req, res) => {
   res.clearCookie('userId');
   res.redirect('/');
 };
 
+//Submit login info
 exports.user_login = (req, res) => {
 
   let email = req.body.email;
@@ -127,6 +137,7 @@ exports.user_login = (req, res) => {
   res.redirect('/');
 };
 
+//Submit info for creating new account
 exports.user_register = (req, res) => {
 
   let email = req.body.email;
