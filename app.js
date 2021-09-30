@@ -5,9 +5,12 @@ const morgan = require("morgan");
 
 const app = express();
 
+app.set('views', path.join(_dirname, 'views'));
+app.set('view engine', 'ejs');
+
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(morgan('dev'));
-app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, 'public')));
 
 module.exports = app;
