@@ -23,7 +23,12 @@ const urlDatabase = {
 };
 
 const users = {
-}
+  'userOne': {
+    id: 'userOne',
+    email: 'a@a.com',
+    password: '123'
+  }
+};
 
 const app = express();
 
@@ -37,13 +42,25 @@ app.get("/urls", (req, res) => {
   let user = users[userId];
   const templateVars = { 
     urls: urlDatabase,
-    user: user
+    user: user,
+    error: ""
   };
   res.render("pages/urls_index", templateVars);
 });
 
+//Create_new_URL
 app.get("/urls/new", (req, res) => {
   let userId = req.cookies["userId"];
+
+  if (!userId) {
+    const templateVars = {};
+    templateVars.error = "";
+    templateVars.user = null;
+    templateVars.urls = urlDatabase;
+
+    templateVars.error = "Log in to create new URLs";
+    return res.render("pages/urls_index", templateVars);
+  }
   let user = users[userId];
   const templateVars = { 
     user: user
@@ -55,7 +72,8 @@ app.get("/urls/login", (req, res) => {
   let userId = req.cookies["userId"];
   let user = users[userId];
   const templateVars = { 
-    user: user
+    user: user,
+    error: "",
   };
   res.render("pages/urls_login", templateVars);
 });
@@ -64,11 +82,11 @@ app.get("/urls/register", (req, res) => {
   let userId = req.cookies["userId"];
   let user = users[userId];
   const templateVars = { 
-    user: user
+    user: user,
+    error: "",
   };
   res.render("pages/urls_register", templateVars);
 });
-
 
 app.get("/urls/:shortURL", (req, res) => {
   const templateVars = { 
@@ -105,12 +123,18 @@ app.post("/register", (req, res) => {
 
   let user = findUserByEmail(email);
 
+  const templateVars = {};
+  templateVars.error = "";
+  templateVars.user = null;
+
   if (!email || !password) {
-    return res.status(400).send("Email or password cannot be blank.");
+    templateVars.error = "Email or password cannot be blank.";
+    return res.render("pages/urls_register", templateVars);
   }
 
   if (user) {
-      return res.status(400).send("Email already in use.");
+    templateVars.error = "Email already in use.";
+    return res.render("pages/urls_register", templateVars);
   }
 
   userId = generateRandomString();
@@ -132,12 +156,18 @@ app.post("/login", (req, res) => {
 
   let user = findUserByEmail(email);
 
+  const templateVars = {};
+  templateVars.error = "";
+  templateVars.user = null;
+
   if (!user) {
-    return res.status(400).send("Credentials invalid");
+    templateVars.error = "User does not exist!";
+    return res.render("pages/urls_login", templateVars);
   }
 
   if (users[user]['password'] !== password) {
-    return res.status(400).send("Credentials invalid");
+    templateVars.error = "Password incorrect";
+    return res.render("pages/urls_login", templateVars);
   }
 
   res.cookie('userId', user);
@@ -150,6 +180,7 @@ app.post("/logout/", (req, res) => {
   res.redirect('/urls');
 });
 
+// delete_route
 app.post("/urls/:shortURL/delete", (req, res) => {
   let shortURL = req.params.shortURL;
   delete urlDatabase[shortURL];

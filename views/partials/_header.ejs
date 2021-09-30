@@ -8,17 +8,16 @@
       <a class="nav-item nav-link" href="/urls">My URLs</a>
       <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       <% if (user) { %>
-        <p class="nav-item nav-link">Email: <%= user['email'] %></p>
+        <p class="nav-item nav-link"><%= user['email'] %></p>
         <form method="POST" action="/logout/">
           <div>
             <button type="logout" class="btn btn-secondary">Logout</button>
           </div>
         </form>
-        <a class="nav-item nav-link" href="/urls/login">Log In</a>
-        <a class="nav-item nav-link" href="/urls/register">Create Account</a>
+        <a class="nav-item nav-link" href="/urls/register">Create New Account</a>
       <% } else { %>
         <a class="nav-item nav-link" href="/urls/login">Log In</a>
-        <a class="nav-item nav-link" href="/urls/register">Create Account</a>
+        <a class="nav-item nav-link" href="/urls/register">Create New Account</a>
       <% } %>
     </div>
   </div>
