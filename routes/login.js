@@ -1,15 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { users, urlDatabase } = require('../public/javascripts/database');
+const user_controller = require('../controllers/userController');
 
-router.get("/", (req, res, next) => {
-  let userId = req.cookies["userId"];
-  let user = users[userId];
-  const templateVars = { 
-    user: user,
-    error: "",
-  };
-  res.render("pages/urls_login", templateVars);
-});
+router.get("/", user_controller.user_login);
 
 module.exports = router;
