@@ -50,6 +50,15 @@ exports.display_urls_new = (req, res) => {
   res.render("pages/urls_new", templateVars);
 };
 
+exports.display_urls_show = (req, res) => {
+  const templateVars = { 
+    shortURL: req.params.shortURL, 
+    longURL: urlDatabase[req.params.shortURL],
+    user: req.cookies["userId"] 
+  };
+  res.render("pages/urls_show", templateVars);
+};
+
 exports.user_register = (req, res) => {
 
   let email = req.body.email;

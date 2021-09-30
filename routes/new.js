@@ -1,15 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { users, urlDatabase } = require('../models/database');
+const database_controller = require('../controllers/databaseController');
 
-router.get("/", (req, res, next) => {
-  let userId = req.cookies["userId"];
-  let user = users[userId];
-  const templateVars = { 
-    user: user,
-    error: "",
-  };
-  res.render("pages/urls_login", templateVars);
-});
+router.get("/", database_controller.display_urls_new);
 
 module.exports = router;

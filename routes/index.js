@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const user_controller = require('../controllers/userController');
+const database_controller = require('../controllers/databaseController');
 
 /* GET home page. */
-router.get('/', user_controller.index);
+router.get('/', database_controller.index);
 
-router.get('/cool', function(req, res, next) {
-  res.send('you are cool');
-});
+router.get('/urls/:shortURL', database_controller.display_urls_show);
+
+router.get('/u/:shortURL', database_controller.display_urls_show);
 
 module.exports = router;
