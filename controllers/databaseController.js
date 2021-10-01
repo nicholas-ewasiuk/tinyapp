@@ -21,6 +21,7 @@ exports.index = (req, res) => {
     user: user,
     error: ""
   };
+  console.log(urlDatabase);
   res.render("pages/urls_index", templateVars);
 };
 
@@ -68,35 +69,43 @@ exports.display_urls_new = (req, res) => {
 
 //Display individual URL page with editing
 exports.display_urls_show = (req, res) => {
-  const templateVars = { 
-    shortURL: req.params.shortURL, 
-    longURL: urlDatabase[req.params.shortURL],
-    user: req.cookies["userId"] 
-  };
-  res.render("pages/urls_show", templateVars);
+
+  if (req.cookies["userId"]) {
+    const templateVars = { 
+      shortURL: req.params.shortURL, 
+      longURL: urlDatabase[req.params.shortURL]['longURL'],
+      user: req.cookies["userId"] 
+    }
+    res.render("pages/urls_show", templateVars);
+  }
+  res.redirect('/');
 };
 
 //Navigate to long URL
 exports.display_urls_long = (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL];
+  const longURL = urlDatabase[req.params.shortURL]['longURL'];
   res.redirect(longURL);
 }; 
 
 
 //Delete URL from database
 exports.url_delete = (req, res) => {
-  let shortURL = req.params.shortURL;
-  delete urlDatabase[shortURL];
-
+  if (req.cookies["userId"]) {
+    let shortURL = req.params.shortURL;
+    delete urlDatabase[shortURL];
+  }
   res.redirect('/');
 };
 
 //Create new shortened URL
 exports.url_new = (req, res) => {
   let longURL = req.body.longURL;
-
   shortURL = generateRandomString();
-  urlDatabase[shortURL] = longURL;
+
+  urlDatabase[shortURL] = { 
+    'longURL': longURL,
+    'userId': req.cookies["userId"]
+  };
 
   res.redirect(`/urls/${shortURL}`);
 };
@@ -106,7 +115,7 @@ exports.url_edit = (req, res) => {
   let longURL = req.body.longURL;
   let shortURL = req.params.id;
 
-  urlDatabase[shortURL] = longURL;
+  urlDatabase[shortURL]['longURL'] = longURL;
 
   res.redirect('/');
 };
