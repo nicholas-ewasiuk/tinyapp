@@ -34,10 +34,6 @@ exports.display_user_login = (req, res) => {
 
 //Display registration page
 exports.display_user_register = (req, res) => {
-  /*if (req.session.userId) {
-    res.redirect('/');
-  }*/
-
   let userId = req.session.userId;
   let user = users[userId];
   const templateVars = { 
@@ -69,14 +65,21 @@ exports.display_urls_new = (req, res) => {
 
 //Display individual URL page with editing
 exports.display_urls_show = (req, res) => {
+  let userId = req.session.userId;
+  let shortURL = req.params.shortURL;
 
-  if (req.session.userId) {
-    const templateVars = { 
-      shortURL: req.params.shortURL, 
-      longURL: urlDatabase[req.params.shortURL]['longURL'],
-      user: users[req.session.userId]
+  if (!userId) {
+    return res.redirect('/');
+  }  
+  if (urlDatabase[shortURL]) {
+    if (urlDatabase[shortURL]['userId'] === users[userId]['id']) {
+      const templateVars = { 
+        shortURL: req.params.shortURL, 
+        longURL: urlDatabase[req.params.shortURL]['longURL'],
+        user: users[req.session.userId]
+      }
+      return res.render("pages/urls_show", templateVars);
     }
-    return res.render("pages/urls_show", templateVars);
   }
   res.redirect('/');
 };
@@ -120,8 +123,15 @@ exports.url_new = (req, res) => {
 exports.url_edit = (req, res) => {
   let longURL = req.body.longURL;
   let shortURL = req.params.id;
+  let userId = req.session.userId;
 
-  urlDatabase[shortURL]['longURL'] = longURL;
+  if (!userId) {
+    return res.redirect('/');
+  } 
+
+  if (urlDatabase[shortURL]['userId'] === users[userId]['id']) {
+    urlDatabase[shortURL]['longURL'] = longURL;
+  }
 
   res.redirect('/');
 };
