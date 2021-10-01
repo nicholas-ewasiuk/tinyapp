@@ -1,4 +1,5 @@
 const { users, urlDatabase } = require('../models/database.js');
+const bcrypt = require('bcryptjs');
 
 function generateRandomString() {
   return (Math.random() * 1e+18).toString(36).slice(0, 6);
@@ -21,7 +22,6 @@ exports.index = (req, res) => {
     user: user,
     error: ""
   };
-  console.log(urlDatabase);
   res.render("pages/urls_index", templateVars);
 };
 
@@ -130,7 +130,6 @@ exports.user_logout = (req, res) => {
 exports.user_login = (req, res) => {
 
   let email = req.body.email;
-  let password = req.body.password;
 
   let user = findUserByEmail(email);
 
@@ -143,13 +142,18 @@ exports.user_login = (req, res) => {
     return res.render("pages/urls_login", templateVars);
   }
 
-  if (users[user]['password'] !== password) {
+  let hashedPassword = users[user]['password'];
+  let passMatch = bcrypt.compareSync(req.body.password, hashedPassword);
+
+  if (!passMatch) {
     templateVars.error = "Password incorrect";
     return res.render("pages/urls_login", templateVars);
   }
 
-  res.cookie('userId', user);
-
+  if (passMatch) {
+    res.cookie('userId', user);
+  }
+  
   res.redirect('/');
 };
 
@@ -157,7 +161,7 @@ exports.user_login = (req, res) => {
 exports.user_register = (req, res) => {
 
   let email = req.body.email;
-  let password = req.body.password;
+  let password = bcrypt.hashSync(req.body.password, 10);
 
   let user = findUserByEmail(email);
 
@@ -184,5 +188,6 @@ exports.user_register = (req, res) => {
   };
 
   res.cookie('userId', userId);
+  console.log(users);
   res.redirect('/');
 };
