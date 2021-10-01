@@ -1,6 +1,8 @@
 # TinyApp Project
 
-A URL shortening site built with Express and EJS. File structure and organization setup similar to MDN Express Tutorial, minus using an actual database. 
+A URL shortening site built with Express and EJS. 
+
+File structure and organization setup similar to MDN Express Tutorial, minus using an actual database. 
 
 ## Final Product
 
