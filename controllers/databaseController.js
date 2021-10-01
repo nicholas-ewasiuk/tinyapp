@@ -15,7 +15,7 @@ function findUserByEmail(email) {
 
 //Display home page
 exports.index = (req, res) => {
-  let userId = req.cookies["userId"];
+  let userId = req.session.userId;
   let user = users[userId];
   const templateVars = { 
     urls: urlDatabase,
@@ -27,7 +27,7 @@ exports.index = (req, res) => {
 
 //Display login page
 exports.display_user_login = (req, res) => {
-  let userId = req.cookies["userId"];
+  let userId = req.session.userId;
   let user = users[userId];
   const templateVars = { 
     user: user,
@@ -38,7 +38,7 @@ exports.display_user_login = (req, res) => {
 
 //Display registration page
 exports.display_user_register = (req, res) => {
-  let userId = req.cookies["userId"];
+  let userId = req.session.userId;
   let user = users[userId];
   const templateVars = { 
     user: user,
@@ -49,7 +49,7 @@ exports.display_user_register = (req, res) => {
 
 //Display URL creation page
 exports.display_urls_new = (req, res) => {
-  let userId = req.cookies["userId"];
+  let userId = req.session.userId;
 
   if (!userId) {
     const templateVars = {};
@@ -70,11 +70,11 @@ exports.display_urls_new = (req, res) => {
 //Display individual URL page with editing
 exports.display_urls_show = (req, res) => {
 
-  if (req.cookies["userId"]) {
+  if (req.session.userId) {
     const templateVars = { 
       shortURL: req.params.shortURL, 
       longURL: urlDatabase[req.params.shortURL]['longURL'],
-      user: req.cookies["userId"] 
+      user: req.session.userId
     }
     res.render("pages/urls_show", templateVars);
   }
@@ -90,7 +90,7 @@ exports.display_urls_long = (req, res) => {
 
 //Delete URL from database
 exports.url_delete = (req, res) => {
-  if (req.cookies["userId"]) {
+  if (req.session.userId) {
     let shortURL = req.params.shortURL;
     delete urlDatabase[shortURL];
   }
@@ -122,7 +122,7 @@ exports.url_edit = (req, res) => {
 
 //Logout current user
 exports.user_logout = (req, res) => {
-  res.clearCookie('userId');
+  req.session = null;
   res.redirect('/');
 };
 
@@ -151,9 +151,9 @@ exports.user_login = (req, res) => {
   }
 
   if (passMatch) {
-    res.cookie('userId', user);
+    req.session.userId = user;
   }
-  
+
   res.redirect('/');
 };
 
@@ -187,7 +187,7 @@ exports.user_register = (req, res) => {
     'password': password
   };
 
-  res.cookie('userId', userId);
+  req.session.userId = users[userId]['id'];
   console.log(users);
   res.redirect('/');
 };
