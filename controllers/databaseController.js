@@ -2,6 +2,13 @@ const { users, urlDatabase } = require('../models/database.js');
 const bcrypt = require('bcryptjs');
 const { generateRandomString, findUserByEmail } = require('./helper.js');
 
+exports.home = (req, res) => {
+  if (req.session.userId) {
+    return res.redirect('/urls');
+  }
+  res.redirect('/login');
+};
+
 //Display home page
 exports.index = (req, res) => {
   let userId = req.session.userId;
@@ -76,8 +83,11 @@ exports.display_urls_show = (req, res) => {
 
 //Navigate to long URL
 exports.display_urls_long = (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL]['longURL'];
-  res.redirect(longURL);
+  if (urlDatabase[req.params.shortURL]) {
+    const longURL = urlDatabase[req.params.shortURL]['longURL'];
+    return res.redirect(longURL);
+  }
+  return res.status(400).send("URL not found");
 }; 
 
 
@@ -127,7 +137,7 @@ exports.user_login = (req, res) => {
 
   let email = req.body.email;
 
-  let user = findUserByEmail(email);
+  let user = findUserByEmail(email, users);
 
   const templateVars = {};
   templateVars.error = "";
@@ -159,7 +169,7 @@ exports.user_register = (req, res) => {
   let email = req.body.email;
   let password = bcrypt.hashSync(req.body.password, 10);
 
-  let user = findUserByEmail(email);
+  let user = findUserByEmail(email, users);
 
   const templateVars = {};
   templateVars.error = "";

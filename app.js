@@ -4,6 +4,7 @@ const path = require('path');
 const cookieSession = require('cookie-session');
 const morgan = require("morgan");
 
+const homeRouter = require('./routes/home');
 const indexRouter = require('./routes/index');
 const loginRouter = require('./routes/login');
 const newRouter = require('./routes/new');
@@ -21,7 +22,8 @@ app.use(cookieSession({
 }));
 app.use(morgan('dev'));
 
-app.use('/', indexRouter);
+app.use('/', homeRouter);
+app.use('/urls', indexRouter);
 app.use('/login', loginRouter);
 app.use('/new', newRouter);
 app.use('/register', registerRouter);
