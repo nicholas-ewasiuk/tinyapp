@@ -20,6 +20,7 @@
         <tbody>
           <% if (user) { %>
             <% for (let url in urls) { %>
+              <% if (urls[url]['userId'] === user['id']) { %>
               <tr>
                 <td><a href='/u/<%= url %>'><%= url %></a></td>
                 <td><%= urls[url]['longURL'] %></td>
@@ -38,6 +39,7 @@
                   </form>
                 </td>
               </tr>
+              <% } %>
               <% } %>
             <% } else { %>
               <tr>

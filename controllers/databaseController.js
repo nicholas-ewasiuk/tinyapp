@@ -1,17 +1,6 @@
 const { users, urlDatabase } = require('../models/database.js');
 const bcrypt = require('bcryptjs');
-
-function generateRandomString() {
-  return (Math.random() * 1e+18).toString(36).slice(0, 6);
-};
-
-function findUserByEmail(email) {
-  for (let key in users) {
-    if (users[key]['email'] === email) {
-      return key;
-    }
-  }
-};
+const { generateRandomString, findUserByEmail } = require('./helper.js');
 
 //Display home page
 exports.index = (req, res) => {
@@ -38,6 +27,10 @@ exports.display_user_login = (req, res) => {
 
 //Display registration page
 exports.display_user_register = (req, res) => {
+  /*if (req.session.userId) {
+    res.redirect('/');
+  }*/
+
   let userId = req.session.userId;
   let user = users[userId];
   const templateVars = { 
@@ -74,9 +67,9 @@ exports.display_urls_show = (req, res) => {
     const templateVars = { 
       shortURL: req.params.shortURL, 
       longURL: urlDatabase[req.params.shortURL]['longURL'],
-      user: req.session.userId
+      user: users[req.session.userId]
     }
-    res.render("pages/urls_show", templateVars);
+    return res.render("pages/urls_show", templateVars);
   }
   res.redirect('/');
 };
@@ -90,10 +83,13 @@ exports.display_urls_long = (req, res) => {
 
 //Delete URL from database
 exports.url_delete = (req, res) => {
-  if (req.session.userId) {
-    let shortURL = req.params.shortURL;
+  let shortURL = req.params.shortURL;
+  let userId = req.session.userId;
+
+  if (urlDatabase[shortURL]['userId'] === users[userId]['id']) {
     delete urlDatabase[shortURL];
   }
+  console.log(urlDatabase);
   res.redirect('/');
 };
 
@@ -104,9 +100,9 @@ exports.url_new = (req, res) => {
 
   urlDatabase[shortURL] = { 
     'longURL': longURL,
-    'userId': req.cookies["userId"]
+    'userId': req.session.userId
   };
-
+  console.log(urlDatabase);
   res.redirect(`/urls/${shortURL}`);
 };
 
@@ -179,7 +175,7 @@ exports.user_register = (req, res) => {
     return res.render("pages/urls_register", templateVars);
   }
 
-  userId = generateRandomString();
+  let userId = generateRandomString();
 
   users[userId] = { 
     'id': userId,
