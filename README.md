@@ -6,9 +6,9 @@ File structure and organization setup similar to MDN Express Tutorial, minus usi
 
 ## Final Product
 
-!["screenshot description"](#)
+!["Login page"](/public/images/tinyapp1.png)
 
-!["screenshot description"](#)
+!["Submitting URLs"](/public/images/tinyapp2.png)
 
 ## Dependencies
 
